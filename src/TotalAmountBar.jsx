@@ -4,7 +4,8 @@ function TotalAmountBar({ expenses }) {
 
     return (
         <div className="total-amount-bar">
-            <h2>Total Amount: {totalAmount}</h2>
+            <span className="total-label">Łączna kwota wydatków</span>
+            <h2>{new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(totalAmount)}</h2>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function ExpanseForm({ expenses, setExpenses }) {
+function ExpanseForm({ addExpense }) {
 
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState(0);
@@ -8,27 +8,35 @@ function ExpanseForm({ expenses, setExpenses }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setExpenses([...expenses, { id: nextId, description, amount: parseFloat(amount) }]);
+        addExpense({ id: nextId, description, amount: parseFloat(amount) });
         setNextId(nextId+1);
         setDescription('');
         setAmount(0);
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-            type="text"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            />
-            <input
-            type="text"
-            placeholder="Amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            />
-            <button type="submit">Add Expense</button>
+        <form className="expense-form" onSubmit={handleSubmit}>
+            <label className="field">
+                Opis
+                <input
+                    type="text"
+                    placeholder="np. Zakupy spożywcze"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+            </label>
+            <label className="field">
+                Kwota (zł)
+                <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="0,00"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                />
+            </label>
+            <button type="submit">Dodaj wydatek</button>
         </form>
     );
 }
