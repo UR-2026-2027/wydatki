@@ -2,14 +2,27 @@ import './App.css'
 import TotalAmountBar from './TotalAmountBar';
 import ExpanseForm from './ExpanseForm';
 import ExpansesList from './ExpansesList';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getExpenses, addExpense } from './api';
 
 function App() {
+  const [expenses, setExpenses] = useState([]);
 
-  const [expenses, setExpenses] = useState([{id: 0, description: "cos", amount: 100.00}]);
+  useEffect(() => {
+    async function fetchExpenses() {
+      try {
+        const expenses = await getExpenses();
+        setExpenses(expenses);
+      } catch (error) {
+        console.error('Błąd podczas pobierania wydatków:', error);
+      }
+    }
+    fetchExpenses();
+  }, []);
 
-  function addExpense(expense) {
-    setExpenses([...expenses, expense]);
+  async function handelAddExpense(expense) {
+    const added = await addExpense(expense);
+    setExpenses([...expenses, added]);
   }
 
   return (
@@ -31,7 +44,7 @@ function App() {
             <h2 id="add-expense-heading">Dodaj wydatek</h2>
             <span className="section-note">Uzupełnij opis i kwotę</span>
           </div>
-          <ExpanseForm addExpense={addExpense} />
+          <ExpanseForm addExpense={handelAddExpense} />
         </section>
 
         <section className="panel" aria-labelledby="expenses-heading">
